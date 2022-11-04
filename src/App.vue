@@ -9,7 +9,7 @@
         color="creamy"
         rounded
         elevation="6"
-        to="/employees"
+        to="/"
       >
         الموضفين
       </v-btn>

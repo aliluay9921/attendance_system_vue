@@ -55,6 +55,122 @@
       </v-row>
     </template>
 
+    <!--  add bonus -->
+    <template>
+      <v-row justify="center">
+        <v-dialog v-model="dialog2" persistent max-width="660">
+          <v-card>
+            <v-card-title class="text-h5 secondary white--text">
+              أضافة مكافئة
+              <v-spacer></v-spacer>
+              <v-btn icon color="red" @click="dialog2 = false">
+                <v-icon dark> mdi-close </v-icon>
+              </v-btn>
+            </v-card-title>
+            <v-card-text>
+              <v-row>
+                <v-col cols="12" sm="4">
+                  <v-text-field
+                    v-model="bonus"
+                    placeholder="المكافئة"
+                    label="المكافئة"
+                    hide-details="auto"
+                    clearable
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="12" sm="4">
+                  <v-radio-group v-model="type">
+                    <v-radio label="مكافئة" value="1"></v-radio>
+                    <v-radio label="مكافئة خاصة" value="2"></v-radio>
+                  </v-radio-group>
+                </v-col>
+              </v-row>
+            </v-card-text>
+
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn
+                class="secondary"
+                color="white darken-1"
+                text
+                @click="dialog2 = false"
+              >
+                غلق
+              </v-btn>
+              <v-btn
+                class="secondary"
+                color="white darken-1"
+                text
+                @click="addBonus()"
+              >
+                أضافة مكافئة
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+      </v-row>
+    </template>
+
+    <!-- add shift -->
+
+    <template>
+      <v-row justify="center">
+        <v-dialog v-model="dialog3" persistent max-width="660">
+          <v-card>
+            <v-card-title class="text-h5 secondary white--text">
+              أضافة مكافئة
+              <v-spacer></v-spacer>
+              <v-btn icon color="red" @click="dialog3 = false">
+                <v-icon dark> mdi-close </v-icon>
+              </v-btn>
+            </v-card-title>
+            <v-card-text>
+              <v-row>
+                <v-col cols="12" sm="4">
+                  <v-text-field
+                    v-model="start_shift"
+                    placeholder="وقت تسجيل الحضور"
+                    label="وقت تسجيل الحضور"
+                    hide-details="auto"
+                    clearable
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="12" sm="4">
+                  <v-text-field
+                    v-model="end_shift"
+                    placeholder="وقت المغادرة"
+                    label="وقت المغادرة"
+                    hide-details="auto"
+                    clearable
+                  ></v-text-field>
+                </v-col>
+              </v-row>
+            </v-card-text>
+
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn
+                class="secondary"
+                color="white darken-1"
+                text
+                @click="dialog3 = false"
+              >
+                غلق
+              </v-btn>
+              <v-btn
+                class="secondary"
+                color="white darken-1"
+                text
+                @click="addShift()"
+              >
+                أضافة شفت
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+      </v-row>
+    </template>
+
     <v-data-table
       :headers="headers"
       :items="employees"
@@ -70,10 +186,19 @@
           <td class="text-start">{{ item.user_name }}</td>
           <td class="text-start">{{ item.full_name }}</td>
           <td class="text-start">{{ item.salary }}</td>
-          <td class="text-start">{{ item.start_attendance }}</td>
-          <td class="text-start">{{ item.leave_attendance }}</td>
-          <td class="text-start">{{ item.reward }}</td>
+          <td class="text-start">
+            <v-chip
+              class="ma-2"
+              color="primary"
+              v-for="(shift, index) in item.shift"
+              :key="index"
+              >{{ shift.start_time }} || {{ shift.end_time }}</v-chip
+            >
+          </td>
+          <td class="text-start">{{ item.bonus }}</td>
+          <td class="text-start">{{ item.coustom_bonus }}</td>
           <td class="text-start">{{ item.absent_count }}</td>
+          <td class="text-start">{{ item.num_clock }}</td>
           <td class="text-start">{{ item.rival }}</td>
           <td class="text-start" style="display: flex; flex-diractions: row">
             <v-btn
@@ -89,6 +214,20 @@
               class="ml-2 mt-2"
               @click="getItem(item, (type = 1))"
               >تعديل</v-btn
+            >
+            <v-btn
+              dark
+              color="info"
+              class="ml-2 mt-2"
+              @click="getItem(item, (type = 2))"
+              >أضافة مكافئة</v-btn
+            >
+            <v-btn
+              dark
+              color="info"
+              class="ml-2 mt-2"
+              @click="getItem(item, (type = 3))"
+              >أضافة شفت</v-btn
             >
           </td>
         </tr>
@@ -156,61 +295,75 @@ export default {
           text: "أسم المستخدم",
           value: "user_name",
           align: "start",
-          class: "secondary white--text title ",
+          class: "nutty white--text title ",
         },
         {
           text: "الأسم الكامل",
           value: "full_name",
           align: "start",
-          class: "secondary white--text title ",
+          class: "nutty white--text title ",
         },
         {
-          text: "الراتب",
+          text: " الراتب الأسمي",
           value: "salary",
           align: "start",
-          class: "secondary white--text title ",
+          class: "nutty white--text title ",
         },
+
         {
-          text: "وقت البصمة",
-          value: "start_attendance",
+          text: " الشفتات ",
+          value: "shift",
           align: "start",
-          class: "secondary white--text title ",
-        },
-        {
-          text: "وقت المغادرة",
-          value: "leave_attendance",
-          align: "start",
-          class: "secondary white--text title ",
+          class: "nutty white--text title ",
         },
         {
           text: "المكافئات",
-          value: "reward",
+          value: "bonus",
           align: "start",
-          class: "secondary white--text title ",
+          class: "nutty white--text title ",
+        },
+        {
+          text: " المكافئات الخاصة",
+          value: "coustom_bonus",
+          align: "start",
+          class: "nutty white--text title ",
         },
         {
           text: "عدد أيام الغياب",
           value: "absent_count",
           align: "start",
-          class: "secondary white--text title ",
+          class: "nutty white--text title ",
+        },
+
+        {
+          text: "عدد ساعات التأخير",
+          value: "num_clock",
+          align: "start",
+          class: "nutty white--text title ",
         },
         {
-          text: "مقدار الخصم",
+          text: "مقدار الخصم الكلي",
           value: "rival",
           align: "start",
-          class: "secondary white--text title ",
+          class: "nutty white--text title ",
         },
         {
           text: "العمليات",
           value: "actions",
           align: "start",
-          class: "secondary white--text title ",
+          class: "nutty white--text title ",
         },
       ],
       pagination: {},
       items: [5, 10, 25, 50, 100],
       dialog: false,
       dialog1: false,
+      dialog2: false,
+      dialog3: false,
+      type: "",
+      bonus: "",
+      start_shift: "",
+      end_shift: "",
     };
   },
   components: {
@@ -247,6 +400,25 @@ export default {
     },
   },
   methods: {
+    addBonus() {
+      let data = {};
+      data["user_id"] = this.item.id;
+      data["type"] = this.type;
+      data["bonus"] = this.bonus;
+      console.log(data);
+      this.$store.dispatch("employees/addBonus", data);
+      this.getEmployees();
+      this.dialog2 = false;
+    },
+    addShift() {
+      let data = {};
+      data["user_id"] = this.item.id;
+      data["start_time"] = this.start_shift;
+      data["end_time"] = this.end_shift;
+      this.$store.dispatch("employees/addShift", data);
+      this.getEmployees();
+      this.dialog3 = false;
+    },
     close() {
       this.dialog = false;
       this.$store.state.employees.selected_object = {};
@@ -259,11 +431,19 @@ export default {
       if (type == 0) {
         this.item = item;
         this.dialog1 = true;
-      } else {
+      } else if (type == 1) {
         this.$store.state.employees.selected_object = {};
         Object.assign(this.$store.state.employees.selected_object, item);
         this.$store.state.employees.isEdit = true;
         this.dialog = true;
+      } else if (type == 2) {
+        this.item = item;
+        this.dialog2 = true;
+
+        console.log(item);
+      } else {
+        this.item = item;
+        this.dialog3 = true;
       }
     },
     deleteEmployee() {

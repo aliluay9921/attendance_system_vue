@@ -8,7 +8,6 @@ const holiday = {
         holidays_state: "done",
         table_loading: false,
         holidaysQuery: "",
-        filter: {},
         pageCount: 1,
         params: {
             dropdown: true,
@@ -55,10 +54,7 @@ const holiday = {
             let skip = (data.page - 1) * data.itemsPerPage;
             let limit = data.itemsPerPage;
             let query = "";
-            var filter = "";
-            if (Object.keys(state.filter).length != 0)
-                filter = "&filter=" + JSON.stringify(state.filter);
-            console.log(filter);
+
             if (
                 state.holidaysQuery != undefined &&
                 state.holidaysQuery != null &&
@@ -67,10 +63,10 @@ const holiday = {
             return new Promise((resolve, reject) => {
 
                 axios({
-                    url: `${rootState.server}` + "/api/get_holidays" + "?skip=" + skip +
+                    url: `${rootState.server}` + "/api/get_holiday" + "?skip=" + skip +
                         "&limit=" +
                         limit +
-                        query + filter,
+                        query,
                     method: "GET",
                 }).then(resp => {
 

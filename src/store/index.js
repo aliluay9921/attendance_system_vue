@@ -11,8 +11,8 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    // server: "http://127.0.0.1:8000",
-    server: "http://www.basmaiq.com",
+    server: "http://127.0.0.1:8000",
+    // server: "http://www.basmaiq.com",
     snackbar: false,
     textSnackbar: "",
     isLoggedIn: false,

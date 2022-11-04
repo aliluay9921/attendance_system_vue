@@ -89,20 +89,20 @@ export default {
           text: "القانون ",
           value: "role",
           align: "start",
-          class: "secondary white--text title ",
+          class: "nutty white--text title ",
         },
         {
           text: "القيمة ",
           value: "value",
           align: "start",
-          class: "secondary white--text title ",
+          class: "nutty white--text title ",
         },
 
         {
           text: "العمليات",
           value: "actions",
           align: "start",
-          class: "secondary white--text title ",
+          class: "nutty white--text title ",
         },
       ],
       pagination: {},

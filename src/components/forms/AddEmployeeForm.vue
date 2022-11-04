@@ -35,7 +35,7 @@
           </v-col>
         </v-row>
         <v-row>
-          <v-col cols="12" sm="4">
+          <v-col cols="12" sm="3">
             <v-text-field
               v-model="selected_object.salary"
               placeholder="الراتب"
@@ -45,7 +45,7 @@
               clearable
             ></v-text-field>
           </v-col>
-          <v-col cols="12" sm="4">
+          <v-col cols="12" sm="3">
             <v-text-field
               v-model="selected_object.start_attendance"
               placeholder="وقت الدوام"
@@ -55,11 +55,21 @@
               clearable
             ></v-text-field>
           </v-col>
-          <v-col cols="12" sm="4">
+          <v-col cols="12" sm="3">
             <v-text-field
               v-model="selected_object.leave_attendance"
               placeholder="وقت المغادرة"
               label="وقت المغادرة"
+              hide-details="auto"
+              :rules="[rules.required]"
+              clearable
+            ></v-text-field>
+          </v-col>
+          <v-col cols="12" sm="3">
+            <v-text-field
+              v-model="selected_object.shift"
+              placeholder="عدد الشفتات"
+              label="عدد الشفتات"
               hide-details="auto"
               :rules="[rules.required]"
               clearable
@@ -119,6 +129,7 @@ export default {
         data["full_name"] = this.selected_object.full_name;
         data["password"] = this.selected_object.password;
         data["salary"] = this.selected_object.salary;
+        data["shift"] = this.selected_object.shift;
         data["start_attendance"] = this.selected_object.start_attendance;
         data["leave_attendance"] = this.selected_object.leave_attendance;
         console.log(data);

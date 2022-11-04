@@ -12,39 +12,52 @@ Vue.use(VueRouter);
 
 const routes = [
   {
-    path: "/",
-    name: "Home",
-    component: Home,
-  },
-  {
     path: "/login",
     name: "login",
     component: Login,
+    meta: {
+      requireNotLogin: true,
+    },
   },
   {
-    path: "/employees",
+    path: "/",
     name: "employees",
     component: Employees,
+    meta: {
+      requireNotLogin: true,
+    },
   },
   {
     path: "/attendance",
     name: "attendance",
     component: Attendance,
+    meta: {
+      requireNotLogin: true,
+    },
   },
   {
     path: "/absents",
     name: "Absent",
     component: Absent,
+    meta: {
+      requireNotLogin: true,
+    },
   },
   {
     path: "/settings",
     name: "Setting",
     component: Setting,
+    meta: {
+      requireNotLogin: true,
+    },
   },
   {
     path: "/hoilday",
     name: "hoilday",
     component: hoilday,
+    meta: {
+      requireNotLogin: true,
+    },
   },
 
 ];

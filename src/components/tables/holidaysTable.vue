@@ -15,7 +15,10 @@
           <td class="text-start">{{ item.title }}</td>
           <td class="text-start">{{ item.body }}</td>
           <td class="text-start" v-if="!item.from_day">_</td>
-          <td class="text-start" v-else>{{ item.from_day }}</td>
+          <td class="text-start" v-else>
+            {{ item.from_day }}
+            <!-- <span>{{ item.from_day | moment("dd,MM,YYYY") }}</span> -->
+          </td>
 
           <td class="text-start" v-if="!item.to_day">_</td>
           <td class="text-start" v-else>{{ item.to_day }}</td>
@@ -26,7 +29,7 @@
           <td class="text-start" v-if="!item.to_hour">_</td>
           <td class="text-start" v-else>{{ item.to_hour }}</td>
 
-          <td class="text-start">{{ item.users.full_name }}</td>
+          <td class="text-start">{{ item.user.full_name }}</td>
         </tr>
       </template>
       <template v-slot:top>
@@ -44,7 +47,7 @@
                 class="mr-5"
               ></v-text-field
             ></v-col>
-            <v-col>
+            <!-- <v-col>
               <v-menu
                 v-model="menu"
                 :close-on-content-click="false"
@@ -70,7 +73,7 @@
                   @change="filter"
                 ></v-date-picker>
               </v-menu>
-            </v-col>
+            </v-col> -->
           </v-row>
         </v-toolbar>
       </template>
@@ -107,50 +110,50 @@ export default {
           text: "العنوان",
           value: "title",
           align: "start",
-          class: "secondary white--text title ",
+          class: "nutty white--text title ",
         },
         {
           text: "النص",
           value: "body",
           align: "start",
-          class: "secondary white--text title ",
+          class: "nutty white--text title ",
         },
         {
           text: "من تأريخ اليوم",
           value: "from_day",
           align: "start",
-          class: "secondary white--text title ",
+          class: "nutty white--text title ",
         },
         {
           text: "الى تأريخ اليوم",
           value: "to_day",
           align: "start",
-          class: "secondary white--text title ",
+          class: "nutty white--text title ",
         },
         {
           text: "من ساعة",
           value: "from_hour",
           align: "start",
-          class: "secondary white--text title ",
+          class: "nutty white--text title ",
         },
         {
           text: "الى ساعة",
           value: "to_hour",
           align: "start",
-          class: "secondary white--text title ",
+          class: "nutty white--text title ",
         },
         {
           text: "أسم المستخدم",
           value: "user_id",
           align: "start",
-          class: "secondary white--text title ",
+          class: "nutty white--text title ",
         },
       ],
       pagination: {},
       items: [5, 10, 25, 50, 100],
       dialog: false,
-      menu: null,
-      date: "",
+      // menu: null,
+      // date: "",
     };
   },
 
@@ -185,14 +188,14 @@ export default {
     },
   },
   methods: {
-    filter() {
-      var filter = { name: "date", value: this.date };
-      Object.assign(this.$store.state.holiday.filter, filter);
-      this.$store.state.holiday.selected_object = {};
-      this.$store.state.holiday.isEdit = false;
-      this.$store.dispatch("holiday/getHolidays");
-      // this.getSalesCategories();
-    },
+    // filter() {
+    //   var filter = { name: "date", value: this.date };
+    //   Object.assign(this.$store.state.holiday.filter, filter);
+    //   this.$store.state.holiday.selected_object = {};
+    //   this.$store.state.holiday.isEdit = false;
+    //   this.$store.dispatch("holiday/getHolidays");
+    //   // this.getSalesCategories();
+    // },
     getItem(item) {
       this.item = item;
       this.dialog = true;
@@ -211,11 +214,11 @@ export default {
       // // console.log(this.query);
       this.holidays_params = par;
 
-      const current = new Date();
-      const moment = require("moment");
-      this.date = moment(current).format("YYYY-MM-DD");
-      var filter = { name: "date", value: this.date };
-      Object.assign(this.$store.state.holiday.filter, filter);
+      // const current = new Date();
+      // const moment = require("moment");
+      // this.date = moment(current).format("YYYY-MM-DD");
+      // var filter = { name: "date", value: this.date };
+      // Object.assign(this.$store.state.holiday.filter, filter);
       this.$store.dispatch("holiday/getHolidays");
     },
 
