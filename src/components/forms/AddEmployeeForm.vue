@@ -3,7 +3,7 @@
     <v-form ref="form" class="mr-10">
       <v-col cols="12" md="12" lg="12">
         <v-row>
-          <v-col cols="12" sm="4">
+          <v-col cols="12" sm="3">
             <v-text-field
               v-model="selected_object.user_name"
               placeholder="أسم المستخدم"
@@ -13,7 +13,7 @@
               clearable
             ></v-text-field>
           </v-col>
-          <v-col cols="12" sm="4">
+          <v-col cols="12" sm="3">
             <v-text-field
               v-model="selected_object.full_name"
               placeholder="الأسم الكامل"
@@ -23,7 +23,7 @@
               clearable
             ></v-text-field>
           </v-col>
-          <v-col cols="12" sm="4" v-if="!isEdit">
+          <v-col cols="12" sm="3" v-if="!isEdit">
             <v-text-field
               v-model="selected_object.password"
               placeholder="كلمة المرور"
@@ -33,8 +33,6 @@
               clearable
             ></v-text-field>
           </v-col>
-        </v-row>
-        <v-row>
           <v-col cols="12" sm="3">
             <v-text-field
               v-model="selected_object.salary"
@@ -45,7 +43,19 @@
               clearable
             ></v-text-field>
           </v-col>
-          <v-col cols="12" sm="3">
+        </v-row>
+        <v-row>
+          <!-- <v-col cols="12" sm="3">
+            <v-text-field
+              v-model="selected_object.salary"
+              placeholder="الراتب"
+              label="الراتب"
+              hide-details="auto"
+              :rules="[rules.required]"
+              clearable
+            ></v-text-field>
+          </v-col> -->
+          <!-- <v-col cols="12" sm="3">
             <v-text-field
               v-model="selected_object.start_attendance"
               placeholder="وقت الدوام"
@@ -64,8 +74,8 @@
               :rules="[rules.required]"
               clearable
             ></v-text-field>
-          </v-col>
-          <v-col cols="12" sm="3">
+          </v-col> -->
+          <!-- <v-col cols="12" sm="3">
             <v-text-field
               v-model="selected_object.shift"
               placeholder="عدد الشفتات"
@@ -74,7 +84,7 @@
               :rules="[rules.required]"
               clearable
             ></v-text-field>
-          </v-col>
+          </v-col> -->
         </v-row>
         <v-row>
           <v-col cols="12" align-self="center" class="text-center">

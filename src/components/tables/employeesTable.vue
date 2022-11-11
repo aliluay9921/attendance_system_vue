@@ -185,7 +185,7 @@
         <tr>
           <td class="text-start">{{ item.user_name }}</td>
           <td class="text-start">{{ item.full_name }}</td>
-          <td class="text-start">{{ item.salary }}</td>
+          <td class="text-start">{{ item.salary }}$</td>
           <td class="text-start">
             <v-chip
               class="ma-2"
