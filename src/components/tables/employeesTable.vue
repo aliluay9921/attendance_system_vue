@@ -199,7 +199,9 @@
           <td class="text-start">{{ item.coustom_bonus }}</td>
           <td class="text-start">{{ item.absent_count }}</td>
           <td class="text-start">{{ item.num_clock }}</td>
-          <td class="text-start">{{ item.rival }}</td>
+          <td class="text-start">
+            {{ item.salary + item.bonus + item.coustom_bonus - item.rival }} $
+          </td>
           <td class="text-start" style="display: flex; flex-diractions: row">
             <v-btn
               dark
@@ -224,7 +226,7 @@
             >
             <v-btn
               dark
-              color="info"
+              color="orange"
               class="ml-2 mt-2"
               @click="getItem(item, (type = 3))"
               >أضافة شفت</v-btn
@@ -342,7 +344,7 @@ export default {
           class: "nutty white--text title ",
         },
         {
-          text: "مقدار الخصم الكلي",
+          text: "الراتب النهائي",
           value: "rival",
           align: "start",
           class: "nutty white--text title ",

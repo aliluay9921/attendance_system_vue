@@ -1,98 +1,103 @@
 import Vue from "vue";
 import axios from "axios";
 
-const settings = {
+const shift = {
     namespaced: true,
     state: () => ({
-        settings: [],
-        settings_state: "done",
+        shifts: [],
+        shifts_state: "done",
         table_loading: false,
-        settingsQuery: "",
-        selected_object: {},
-        isEdit: false,
+        shiftsQuery: "",
         pageCount: 1,
+        filter: {},
         params: {
-            dropdown: true,
             page: 1,
             itemsPerPage: 50,
         },
     }),
     getters: {},
     mutations: {
-        settings_success(state, settings) {
-            state.settings.splice(0, state.settings.length)
-            settings.forEach(element => {
-                state.settings.push(element)
+        shifts_success(state, shifts) {
+            state.shifts.splice(0, state.shifts.length)
+            shifts.forEach(element => {
+                state.shifts.push(element)
             });
-            state.settings_state = "done"
+            state.shifts_state = "done"
             state.table_loading = false
 
         },
-        settings_request(state) {
-            state.settings_state = "loading";
+        shifts_request(state) {
+            state.shifts_state = "loading";
         },
-
-        settings_error(state) {
-            state.settings_state = "error";
+        shifts_error(state) {
+            state.shifts_state = "error";
         },
-        add_settings_success(state, settings) {
-            state.settings.unshift(settings);
-            state.settings_state = "done";
-            state.table_loading = false;
-            console.log(settings);
-        },
-
-        settings_edit_success(state, setting) {
-            let index = state.settings.findIndex((e) => e.id == setting.id);
-            Vue.set(state.settings, index, setting);
-            state.settings_state = "done";
+        edit_shift_success(state, shift) {
+            let index = state.shifts.findIndex((e) => e.id == shift.id);
+            Vue.set(state.shifts, index, shift);
+            state.shifts_state = "done";
             state.table_loading = false;
         },
+        delete_shift(state, shift) {
+            let index = state.shifts.findIndex((e) => e.id == shift.id);
+            state.shifts.splice(index, 1)
+            state.shifts_state = "done";
+            state.table_loading = false;
+        }
+
+
+
     },
     actions: {
         async resetFields({ state }) {
-            state.settings_state = "done";
-            state.settings = [];
+            state.shifts_state = "done";
+            state.shifts = [];
             state.table_loading = false;
             state.params = {
-                dropdown: true,
                 page: 1,
                 itemsPerPage: 10,
             };
         },
-        async getSettings({ commit, state, dispatch, rootState }) {
-            if (state.settings_state != "done") return -1;
+        async getShifts({ commit, state, dispatch, rootState }) {
+            if (state.shifts_state != "done") return -1;
             state.table_loading = true;
             console.log("here")
             let data = state.params;
 
             let skip = (data.page - 1) * data.itemsPerPage;
             let limit = data.itemsPerPage;
-
+            let query = "";
+            // var filter = "";
+            // if (Object.keys(state.filter).length != 0)
+            //     filter = "&filter=" + JSON.stringify(state.filter);
+            // console.log(filter);
             if (
-                state.settingsQuery != undefined &&
-                state.settingsQuery != null &&
-                state.settingsQuery.length > 0
-            ) query = `&query=${state.settingsQuery}`;
+                state.shiftsQuery != undefined &&
+                state.shiftsQuery != null &&
+                state.shiftsQuery.length > 0
+            ) query = `&query=${state.shiftsQuery}`;
             return new Promise((resolve, reject) => {
 
                 axios({
-                    url: `${rootState.server}` + "/api/get_roles" + "?skip=" + skip +
+                    url: `${rootState.server}` + "/api/get_shifts" + "?skip=" + skip +
                         "&limit=" +
-                        limit
-                    ,
+                        limit +
+                        query,
                     method: "GET",
                 }).then(resp => {
 
                     state.table_loading = false;
                     state.pageCount = resp.data.count;
-                    commit('settings_success', resp.data.result)
+
+                    commit('shifts_success', resp.data.result)
                     dispatch("snackbarToggle", { toggle: true, text: resp.data.message }, { root: true });
+
+
                     resolve(resp);
                 }).catch((err) => {
                     state.table_loading = false;
                     reject(err);
-                    commit("settings_error");
+                    commit("shifts_error");
                     dispatch(
                         "snackbarToggle",
                         { toggle: true, text: err.response.data.message },
@@ -103,20 +108,21 @@ const settings = {
             })
 
         },
-        async addSetting({ commit, state, dispatch, rootState }, data) {
+
+        async editShift({ commit, state, dispatch, rootState }, data) {
             state.table_loading = true
-            return new Promise((resolve) => {
-                commit("settings_request");
+            return new Promise((resolve, reject) => {
+                commit("shifts_request");
                 axios({
-                    url: `${rootState.server}` + "/api/add_role",
+                    url: `${rootState.server}` + "/api/edit_shift",
                     data: data,
                     headers: {
                         "Content-Type": "application/json",
                     },
-                    method: "POST",
+                    method: "PUT",
                 }).then(resp => {
-                    state.table_loading = false;
-                    commit("add_settings_success", resp.data.result[0]);
+                    state.table_loading = false
+                    commit("edit_shift_success", resp.data.result[0])
                     dispatch(
                         "snackbarToggle",
                         { toggle: true, text: resp.data.message },
@@ -124,9 +130,8 @@ const settings = {
                     );
                     resolve(resp);
                 }).catch((err) => {
-                    console.log(err);
                     state.table_loading = false;
-                    commit("settings_error");
+                    commit("shifts_error");
                     dispatch(
                         "snackbarToggle",
                         { toggle: true, text: err.response.data.message },
@@ -137,20 +142,20 @@ const settings = {
                 });
             });
         },
-        async editSetting({ commit, state, dispatch, rootState }, data) {
+        async deleteShift({ commit, state, dispatch, rootState }, data) {
             state.table_loading = true
             return new Promise((resolve, reject) => {
-                commit("settings_request");
+                commit("shifts_request");
                 axios({
-                    url: `${rootState.server}` + "/api/update_role",
-                    data: data,
+                    url: `${rootState.server}` + "/api/delete_shift",
+                    data: { id: data.id },
                     headers: {
                         "Content-Type": "application/json",
                     },
-                    method: "PUT",
+                    method: "delete",
                 }).then(resp => {
                     state.table_loading = false
-                    commit("settings_edit_success", resp.data.result[0])
+                    commit("delete_shift", resp.data.result[0])
                     dispatch(
                         "snackbarToggle",
                         { toggle: true, text: resp.data.message },
@@ -159,7 +164,7 @@ const settings = {
                     resolve(resp);
                 }).catch((err) => {
                     state.table_loading = false;
-                    commit("settings_error");
+                    commit("shifts_error");
                     dispatch(
                         "snackbarToggle",
                         { toggle: true, text: err.response.data.message },
@@ -171,39 +176,8 @@ const settings = {
             });
         },
 
-
-        async resetPassword({ commit, state, dispatch, rootState }, data) {
-            state.table_loading = true
-            return new Promise((resolve, reject) => {
-                axios({
-                    url: `${rootState.server}` + "/api/reset_password",
-                    data: data,
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    method: "PUT",
-                }).then(resp => {
-                    state.table_loading = false
-                    dispatch(
-                        "snackbarToggle",
-                        { toggle: true, text: resp.data.message },
-                        { root: true }
-                    );
-                    resolve(resp);
-                }).catch((err) => {
-                    state.table_loading = false;
-                    dispatch(
-                        "snackbarToggle",
-                        { toggle: true, text: err.response.data.message },
-                        { root: true }
-                    );
-
-                    console.warn(err);
-                });
-            });
-        }
 
     }
 
 }
-export default settings;
+export default shift;

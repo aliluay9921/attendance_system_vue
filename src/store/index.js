@@ -6,6 +6,8 @@ import attendance from '../store/modules/attendance'
 import absent from '../store/modules/absent'
 import setting from '../store/modules/setting'
 import holiday from '../store/modules/holiday'
+import bouns from '../store/modules/bouns'
+import shift from '../store/modules/shift'
 
 Vue.use(Vuex);
 
@@ -105,8 +107,10 @@ export default new Vuex.Store({
       });
     },
 
+
+
   },
   modules: {
-    employees, attendance, absent, setting, holiday
+    employees, attendance, absent, setting, holiday, bouns, shift
   },
 });

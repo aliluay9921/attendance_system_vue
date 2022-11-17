@@ -64,6 +64,39 @@
         color="creamy"
         rounded
         elevation="6"
+        to="/bonuses"
+      >
+        المكافئات
+      </v-btn>
+      <v-spacer></v-spacer>
+      <v-btn
+        style="color: black"
+        dark
+        color="creamy"
+        rounded
+        elevation="6"
+        to="/shift"
+      >
+        الشفتات
+      </v-btn>
+      <v-spacer></v-spacer>
+      <v-btn
+        style="color: black"
+        dark
+        color="creamy"
+        rounded
+        elevation="6"
+        to="/reset_password"
+      >
+        تغير كلمة المرور
+      </v-btn>
+      <v-spacer></v-spacer>
+      <v-btn
+        style="color: black"
+        dark
+        color="creamy"
+        rounded
+        elevation="6"
         @click="signOut"
       >
         تسجيل خروج
@@ -72,6 +105,17 @@
     </v-app-bar>
 
     <v-main>
+      <v-snackbar v-model="snackbar" shaped :multi-line="true">
+        <div v-for="(text, index) in textSnackbar.split('\n')" :key="index">
+          {{ index == 0 ? "" : index + "-" }} {{ text }}
+        </div>
+
+        <template v-slot:action="{ attrs }">
+          <v-btn color="pink" text v-bind="attrs" @click="snackbar = false">
+            أغلاق
+          </v-btn>
+        </template>
+      </v-snackbar>
       <router-view />
     </v-main>
   </v-app>

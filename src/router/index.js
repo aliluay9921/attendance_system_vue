@@ -7,6 +7,9 @@ import Attendance from "../views/Attendance.vue";
 import Absent from "../views/Absent.vue";
 import Setting from "../views/setting.vue";
 import hoilday from "../views/Hoilday.vue";
+import ResetPassword from "../views/ResetPassword.vue";
+import Bonus from "../views/Bonus.vue";
+import Shift from "../views/Shift.vue";
 
 Vue.use(VueRouter);
 
@@ -55,6 +58,30 @@ const routes = [
     path: "/hoilday",
     name: "hoilday",
     component: hoilday,
+    meta: {
+      requireNotLogin: true,
+    },
+  },
+  {
+    path: "/reset_password",
+    name: "reset_password",
+    component: ResetPassword,
+    meta: {
+      requireNotLogin: true,
+    },
+  },
+  {
+    path: "/bonuses",
+    name: "bonuses",
+    component: Bonus,
+    meta: {
+      requireNotLogin: true,
+    },
+  },
+  {
+    path: "/shift",
+    name: "shift",
+    component: Shift,
     meta: {
       requireNotLogin: true,
     },
